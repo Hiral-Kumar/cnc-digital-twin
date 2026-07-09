@@ -1,0 +1,199 @@
+# ═══════════════════════════════════════════════════════════════════
+# PC-NDT Configuration File
+# Physics-Constrained Neural Digital Twin for CNC Machining
+# ═══════════════════════════════════════════════════════════════════
+# Every number in this project lives here.
+# Change something here — it changes everywhere automatically.
+# ═══════════════════════════════════════════════════════════════════
+
+project:
+  name: "PC-NDT"
+  version: "0.1.0"
+  description: "Physics-Constrained Neural ODE + STGNN for CNC Bearing RUL"
+  author: "Hiral Kumar"
+
+# ── Dataset Paths ──────────────────────────────────────────────────
+# Change these paths to match where you unzipped your datasets.
+# Use forward slashes even on Windows (Python handles it).
+data:
+  ims:
+    root_dir: "data/raw/IMS"          # folder containing 1st_test, 2nd_test, 3rd_test
+    test1_dir: "data/raw/IMS/1st_test"
+    test2_dir: "data/raw/IMS/2nd_test"
+    test3_dir: "data/raw/IMS/3rd_test"
+    sampling_rate: 20480              # Hz — samples per file per channel
+    n_channels_test1: 8               # Test 1 has 8 channels (2 per bearing × 4)
+    n_channels_test23: 4              # Tests 2 & 3 have 4 channels (1 per bearing)
+    n_bearings: 4                     # Always 4 bearings in all tests
+    # Which channels to use from Test 1 for 4-node graph reduction
+    # 0,2,4,6 = first accelerometer (horizontal) of each bearing
+    test1_channel_selection: [0, 2, 4, 6]
+    # Bearing failure information (from IMS documentation)
+    failures:
+      test1: ["Bearing 3 inner race", "Bearing 4 roller element"]
+      test2: ["Bearing 1 outer race"]
+      test3: ["Bearing 3 outer race"]
+
+  pronostia:
+    root_dir: "data/raw/PRONOSTIA"
+    sampling_rate_vibration: 25600    # Hz
+    sampling_rate_temperature: 10     # Hz
+    n_conditions: 3
+    conditions:
+      - {id: 1, rpm: 1800, load_n: 4000}
+      - {id: 2, rpm: 1650, load_n: 4200}
+      - {id: 3, rpm: 1500, load_n: 5000}
+
+  milling:
+    root_dir: "data/raw/Milling"
+    # Used ONLY for Archard constraint validation — not RUL training
+
+# ── Preprocessing Settings ─────────────────────────────────────────
+preprocessing:
+  # Feature extraction
+  features: ["rms", "kurtosis", "crest_factor", "peak_to_peak", "spectral_amp"]
+  n_features: 5
+
+  # Bearing geometry for IMS (from documentation)
+  # Used to compute Ball Pass Frequency Outer race (BPFO)
+  # These are standard values for the Rexnord ZA-2115 bearing used in IMS
+  bearing:
+    n_balls: 16
+    contact_angle_deg: 15.17
+    ball_diameter_mm: 0.331          # in meters after conversion
+    pitch_diameter_mm: 2.815         # in meters after conversion
+    shaft_speed_rpm: 2000
+
+  # RUL labeling
+  # FPT = First Prediction Time: first point where degradation is detectable
+  # We use 2σ above rolling mean of RMS as the FPT threshold
+  fpt:
+    rms_sigma_threshold: 2.0        # standard deviations above rolling mean
+    rolling_window: 50              # files used for rolling mean computation
+
+  # Baseline drift removal
+  # Subtract mean of the first N files from all subsequent files
+  drift_removal_window: 50          # number of early files to use as baseline
+
+  # Normalization
+  # ALWAYS fit on training set ONLY — applied to all other sets
+  normalization: "minmax"           # options: minmax, standard
+
+  # Sliding window parameters
+  window_size: 50                   # number of timesteps per sample
+  stride_healthy: 5                 # stride during healthy phase (first 80% of run)
+  stride_degraded: 1                # stride during degradation phase (last 20% of run)
+  degraded_threshold: 0.80          # fraction of run considered "healthy"
+
+# ── Train / Val / Test Split ───────────────────────────────────────
+# IMPORTANT: Always chronological — never random for time-series
+splits:
+  train: "ims_test1"               # primary training set
+  validation: "ims_test1_val"      # last 20% of Test 1 timeline (held from training)
+  debug: "ims_test2"               # use this first to verify pipeline works
+  test: "ims_test3"                # held-out, never touched during training
+  cross_condition: "pronostia"     # zero-shot generalisation test
+
+  # Chronological split fractions for Test 1
+  train_fraction: 0.60
+  val_fraction: 0.20
+  # Remaining 0.20 is the mini-test (sanity check before full Test 3 evaluation)
+
+# ── Graph Settings ─────────────────────────────────────────────────
+graph:
+  n_nodes: 4                        # 4 bearings = 4 nodes in all splits
+  embedding_dim: 10                 # AGCRN node embedding dimension (d)
+  # Physical prior adjacency (used only for sanity checking learned graph)
+  # Shaft distances between bearings (in mm), approximate
+  shaft_distances: [[0, 50, 100, 150],
+                    [50,  0,  50, 100],
+                    [100, 50,  0,  50],
+                    [150, 100, 50,  0]]
+
+# ── Model Architecture ─────────────────────────────────────────────
+model:
+  # AGCRN Spatial Encoder
+  agcrn:
+    embedding_dim: 10               # node embedding size (d)
+    hidden_dim: 64                  # GRU hidden state size
+    n_layers: 2                     # number of stacked graph-GRU layers
+    cheb_k: 2                       # Chebyshev polynomial order for graph conv
+
+  # Neural ODE Temporal Propagator
+  neural_ode:
+    hidden_dim: 64                  # must match agcrn.hidden_dim
+    mlp_layers: 3                   # depth of f_theta network
+    mlp_hidden: 128                 # width of f_theta MLP layers
+    activation: "tanh"              # tanh is standard for ODEs (smooth derivative)
+    solver: "dopri5"                # Dormand-Prince adaptive step solver
+    rtol: 1.0e-3                    # relative tolerance (looser than 1e-5 for speed)
+    atol: 1.0e-4                    # absolute tolerance
+    adjoint: true                   # use adjoint method for memory-efficient training
+
+  # Readout Head
+  readout:
+    input_dim: 64                   # matches neural_ode.hidden_dim
+    output_dim: 1                   # one RUL value per node
+
+# ── Physics Constraint Settings ────────────────────────────────────
+physics:
+  # Warm-up schedule: physics constraints ramp in gradually
+  warmup_epochs: 20                 # epochs with zero physics loss
+  rampup_epochs: 30                 # epochs for linear ramp to full weight
+
+  # Physics constraint loss weights (lambda values)
+  # Set to null initially — auto-scaled by loss magnitude at epoch warmup_epochs
+  lambda_archard: null              # auto-scaled, then grid-searched
+  lambda_paris: null
+  lambda_fourier: null
+  lambda_grid: [0.01, 0.1, 1.0]    # grid search space
+
+  # Archard's Wear Law constants (for IMS Rexnord ZA-2115 bearing steel)
+  archard:
+    wear_coefficient_k: 1.0e-7     # dimensionless, typical for lubricated steel
+    hardness_H: 6.0e9              # Pa, Vickers hardness of bearing steel
+    constant_load_N: 26689.0       # Newtons — 6000 lb IMS radial load
+
+  # Paris' Law constants (for bearing steel, typical values)
+  paris:
+    C: 1.0e-11                     # material constant (SI units: m/cycle)
+    m: 3.0                         # Paris exponent (3.0 is standard for steel)
+    geometry_factor_Y: 1.12        # standard geometry factor for edge crack
+
+  # Fourier's Heat Equation constants (steel)
+  fourier:
+    thermal_diffusivity: 1.2e-5    # m²/s for steel
+    density: 7850.0                # kg/m³
+    specific_heat: 500.0           # J/(kg·K)
+    friction_coefficient: 0.15     # approximate lubricated steel contact
+
+# ── Training Settings ──────────────────────────────────────────────
+training:
+  epochs: 200
+  batch_size: 32
+  learning_rate: 1.0e-3
+  weight_decay: 1.0e-4             # L2 regularization (applied to all except embeddings)
+  lr_scheduler: "cosine"           # cosine annealing
+  grad_clip_max_norm: 1.0          # gradient clipping threshold
+
+  # Early stopping
+  early_stopping_patience: 20      # epochs without improvement before stopping
+  monitor_metric: "val_rmse"       # metric to monitor for early stopping
+
+  # Checkpointing
+  checkpoint_dir: "checkpoints/"
+  save_best_only: true
+
+  # Logging
+  log_every_n_steps: 10            # print loss every N batches
+
+# ── Evaluation Settings ────────────────────────────────────────────
+evaluation:
+  metrics: ["rmse", "phm2012_score", "delta_rmse", "pearson_rho"]
+  # PHM 2012 Score parameters (official formula)
+  phm2012:
+    early_denominator: 20          # Er > 0 (predicted too early — safe)
+    late_denominator: 5            # Er <= 0 (predicted too late — dangerous)
+
+# ── Random Seed (for reproducibility) ─────────────────────────────
+seed: 42
