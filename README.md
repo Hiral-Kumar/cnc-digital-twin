@@ -8,7 +8,6 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-orange?logo=pytorch)](https://pytorch.org)
 [![Tests](https://img.shields.io/badge/Tests-30%20passing-brightgreen)](#testing)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![AWS](https://img.shields.io/badge/AWS-Cloud%20Club%20GBU-yellow?logo=amazon-aws)](https://aws.amazon.com)
 
 **Author:** Hiral Kumar — B.Tech CSE, Gautam Buddha University
