@@ -433,11 +433,15 @@ Physics warm-up:  Epochs 0-20 (λ=0) → 20-50 (linear ramp) → 50+ (full)
 
 | Bearing | RMSE ↓ | PHM2012 Score ↑ |
 |---|---|---|
-| Bearing 1 | — | — |
-| Bearing 2 | — | — |
-| Bearing 3 | — | — |
-| Bearing 4 | — | — |
-| **Aggregate** | **—** | **—** |
+| Bearing 1 |  0.53293  | 0.09732 |
+| Bearing 2 | 0.53446 | 0.09598 |
+| Bearing 3 | 0.52572  | 0.10418 |
+| Bearing 4 | 0.42447 | 0.33314 |
+| **Aggregate** | **0.50651** | **0.15765** |
+
+ Interpretation:
+    RMSE: lower is better | PHM2012 Score: higher is better (max=1.0)
+    PHM2012 penalises late predictions more than early ones
 
 > Table will be populated with real numbers after the baseline comparison runs.
 > Current RMSE visible in `results/evaluation_results.json`.
