@@ -53,7 +53,7 @@ cnc-digital-twin/
 
 ```bash
 # 1. Clone
-git clone https://github.com/YOUR_USERNAME/cnc-digital-twin.git
+git clone https://github.com/Hiral-Kumar/cnc-digital-twin.git
 cd cnc-digital-twin
 
 # 2. Install dependencies
