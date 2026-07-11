@@ -13,7 +13,7 @@
 
 **Author:** Hiral Kumar — B.Tech CSE, Gautam Buddha University
 **Affiliation:** AI/ML Core Member, AWS Cloud Club GBU
-**Mentorship:** AWS AI/ML Solutions Architecture Program
+**Mentorship:** AWS AI/ML Team
 
 </div>
 
