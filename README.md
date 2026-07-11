@@ -1,4 +1,3 @@
-cat > /home/claude/README.md << 'PYEOF'
 <div align="center">
 
 # 🔧 PC-NDT
@@ -625,8 +624,3 @@ Any of these would be a high-value contribution. The baselines script is the mos
 *Gautam Buddha University, Greater Noida, India*
 
 </div>
-PYEOF
-echo "README written — $(wc -l < /home/claude/README.md) lines"
-Output
-
-README written — 622 lines
