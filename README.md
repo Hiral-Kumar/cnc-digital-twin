@@ -10,10 +10,6 @@
 [![Tests](https://img.shields.io/badge/Tests-30%20passing-brightgreen)](#testing)
 [![AWS](https://img.shields.io/badge/AWS-Cloud%20Club%20GBU-yellow?logo=amazon-aws)](https://aws.amazon.com)
 
-**Author:** Hiral Kumar — B.Tech CSE, Gautam Buddha University
-**Affiliation:** AI/ML Core Member, AWS Cloud Club GBU
-**Mentorship:** AWS (AI/ML)
-
 </div>
 
 ---
