@@ -124,27 +124,27 @@ These constraints mean the model **cannot make physically impossible predictions
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    INPUT                                      │
+│                    INPUT                                     │
 │         Raw sensor window [B × 50 timesteps × 4 bearings     │
 │                           × 5 features]                      │
 └──────────────────────────┬───────────────────────────────────┘
                            │
                            ▼
 ┌──────────────────────────────────────────────────────────────┐
-│                 STAGE 1: AGCRN                                │
-│         Adaptive Graph Convolutional Recurrent Network        │
-│                                                               │
-│  • Learns adjacency A = softmax(ReLU(E·Eᵀ)) from data       │
+│                 STAGE 1: AGCRN                               │
+│         Adaptive Graph Convolutional Recurrent Network       │
+│                                                              │
+│  • Learns adjacency A = softmax(ReLU(E·Eᵀ)) from data        │
 │  • Node-adaptive graph-convolved GRU per timestep            │
-│  • Output: H_T [B × 4 nodes × 64 hidden dim]                │
+│  • Output: H_T [B × 4 nodes × 64 hidden dim]                 │
 │            spatially-contextualised node states              │
 └──────────────────────────┬───────────────────────────────────┘
                            │  H_T becomes h(t₀)
                            ▼
 ┌──────────────────────────────────────────────────────────────┐
-│                 STAGE 2: NEURAL ODE                           │
+│                 STAGE 2: NEURAL ODE                          │
 │         dh(t)/dt = f_θ(h(t), t)                              │
-│                                                               │
+│                                                              │
 │  • f_θ = 3-layer MLP with tanh activations                   │
 │  • Solved by dopri5 adaptive-step ODE solver                 │
 │  • Trained via adjoint sensitivity method (O(1) memory)      │
@@ -154,14 +154,14 @@ These constraints mean the model **cannot make physically impossible predictions
                            │
                            ▼
 ┌──────────────────────────────────────────────────────────────┐
-│                 STAGE 3: OUTPUTS                              │
-│                                                               │
+│                 STAGE 3: OUTPUTS                             │
+│                                                              │
 │  RUL prediction    [B × 4]   — Remaining Useful Life         │
 │                               per bearing, in (0,1)          │
-│                                                               │
+│                                                              │
 │  Physics Disagree  [B × 4]   — How far predicted wear rate   │
 │  ment Score (PDS)             deviates from Archard's Law.   │
-│                               Rising PDS = bearing degrading  │
+│                               Rising PDS = bearing degrading │
 │                               faster than physics predicts.  │
 └──────────────────────────────────────────────────────────────┘
 
