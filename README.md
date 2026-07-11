@@ -519,7 +519,7 @@ PHASE 3 — Implementation (In Progress — ~20% complete)
 
 ```
   ⏳ Baseline comparisons (LSTM, GRU, AGCRN-only, ODE-only)
-     → scripts/baselines.py — builds Table 1 of the paper
+     → scripts/baselines.py — builds Table 1 of the paper (PC-NDT_Report file.docx)
 
   ⏳ PRONOSTIA cross-condition evaluation
      → scripts/evaluate_pronostia.py — answers RQ3
