@@ -1,0 +1,14 @@
+{
+  "bearing": "Training_set/Bearing1_1",
+  "condition_id": 1,
+  "condition_details": {
+    "rpm": 1800,
+    "load_n": 4000
+  },
+  "n_windows": 2753,
+  "pronostia_rmse": 0.386558,
+  "pronostia_phm2012_score": 0.207437,
+  "ims_test3_rmse": null,
+  "delta_rmse_drop_pct": null,
+  "note": "Partial weight transfer with only node embeddings reinitialized due to N=2 vs N=4 graph mismatch. For strongest RQ3 claim, retrain jointly or replace node-specific embeddings with a graph-size-agnostic encoder."
+}

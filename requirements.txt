@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────────────────────
+# PC-NDT: Physics-Constrained Neural Digital Twin
+# CNC Machining Fault Propagation Modeling
+# Author: Hiral Kumar | AWS Cloud Club GBU
+# ─────────────────────────────────────────────────────────────
+# Install with: pip install -r requirements.txt
+
+# Core scientific computing
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+
+# Deep learning
+torch>=2.0.0
+torchdiffeq>=0.2.3          # Neural ODE solver (adjoint method)
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Configuration management
+pyyaml>=6.0
+
+# Progress bars (training loops)
+tqdm>=4.65.0
+
+# Testing
+pytest>=7.3.0
+
+# Utilities
+scikit-learn>=1.2.0          # Used for MinMaxScaler in normalization
