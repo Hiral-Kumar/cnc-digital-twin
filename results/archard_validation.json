@@ -1,0 +1,92 @@
+{
+  "n_runs_analyzed": 145,
+  "excluded_runs": [
+    17
+  ],
+  "n_condition_groups": 8,
+  "group_level_summary": [
+    {
+      "material": 1.0,
+      "feed": 0.5,
+      "doc": 1.5,
+      "n_runs": 22,
+      "mean_wear_rate": 0.038571428571428576,
+      "mean_vib_rms": 0.3771680870457132,
+      "archard_predicted": 9.834433134317388e-13
+    },
+    {
+      "material": 1.0,
+      "feed": 0.5,
+      "doc": 0.75,
+      "n_runs": 24,
+      "mean_wear_rate": 0.022173913043478266,
+      "mean_vib_rms": 0.3202177809870114,
+      "archard_predicted": 4.917216567158694e-13
+    },
+    {
+      "material": 1.0,
+      "feed": 0.25,
+      "doc": 0.75,
+      "n_runs": 34,
+      "mean_wear_rate": 0.02303030303030303,
+      "mean_vib_rms": 0.28658067369592766,
+      "archard_predicted": 2.458608283579347e-13
+    },
+    {
+      "material": 1.0,
+      "feed": 0.25,
+      "doc": 1.5,
+      "n_runs": 17,
+      "mean_wear_rate": 0.03875,
+      "mean_vib_rms": 0.29016931610708097,
+      "archard_predicted": 4.917216567158694e-13
+    },
+    {
+      "material": 2.0,
+      "feed": 0.5,
+      "doc": 1.5,
+      "n_runs": 9,
+      "mean_wear_rate": 0.0775,
+      "mean_vib_rms": 0.28695394458333046,
+      "archard_predicted": 2.6821181275411053e-12
+    },
+    {
+      "material": 2.0,
+      "feed": 0.25,
+      "doc": 1.5,
+      "n_runs": 7,
+      "mean_wear_rate": 0.11666666666666665,
+      "mean_vib_rms": 0.2743739285035464,
+      "archard_predicted": 1.3410590637705527e-12
+    },
+    {
+      "material": 2.0,
+      "feed": 0.25,
+      "doc": 0.75,
+      "n_runs": 20,
+      "mean_wear_rate": 0.08052631578947368,
+      "mean_vib_rms": 0.28901704034900655,
+      "archard_predicted": 6.705295318852763e-13
+    },
+    {
+      "material": 2.0,
+      "feed": 0.5,
+      "doc": 0.75,
+      "n_runs": 12,
+      "mean_wear_rate": 0.10363636363636362,
+      "mean_vib_rms": 0.298713416200242,
+      "archard_predicted": 1.3410590637705527e-12
+    }
+  ],
+  "material_wear_ratio_observed": 3.088,
+  "material_hardness_ratio_assumed": 2.727,
+  "direction_match": true,
+  "pearson_archard": 0.57,
+  "pearson_archard_pvalue": 0.1402,
+  "spearman_archard": 0.6988,
+  "pearson_vibration": -0.442,
+  "spearman_vibration": -0.4286,
+  "caveat": "n=8 groups - low statistical power. Material hardness values are literature estimates, not fitted to this dataset.",
+  "verified_nan_filter": true,
+  "verified_nan_count": 0
+}
