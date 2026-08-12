@@ -1,0 +1,36 @@
+{
+  "checkpoint": {
+    "epoch": 17,
+    "val_rmse": 0.04249706119298935
+  },
+  "dataset": "NASA IMS Test 3 (held-out)",
+  "metrics": {
+    "per_bearing": {
+      "Bearing 1": {
+        "rmse": 0.532929,
+        "phm2012_score": 0.097317
+      },
+      "Bearing 2": {
+        "rmse": 0.534455,
+        "phm2012_score": 0.09598
+      },
+      "Bearing 3": {
+        "rmse": 0.525725,
+        "phm2012_score": 0.104177
+      },
+      "Bearing 4": {
+        "rmse": 0.424472,
+        "phm2012_score": 0.333142
+      }
+    },
+    "aggregate": {
+      "rmse": 0.506512,
+      "phm2012_score": 0.157654
+    }
+  },
+  "notes": {
+    "normalization": "fitted on IMS Test 1 training split (deterministic)",
+    "evaluation_set": "IMS Test 3 \u2014 never seen during training",
+    "model": "PC-NDT (AGCRN + Neural ODE + Physics Constraints)"
+  }
+}
