@@ -8,7 +8,7 @@
   "n_windows": 465,
   "pronostia_rmse": 0.385682,
   "pronostia_phm2012_score": 0.207905,
-  "ims_test3_rmse": null,
-  "delta_rmse_drop_pct": null,
+  "ims_test3_rmse": 0.506512,
+  "delta_rmse_drop_pct": -23.86,
   "note": "Partial weight transfer with only node embeddings reinitialized due to N=2 vs N=4 graph mismatch. For strongest RQ3 claim, retrain jointly or replace node-specific embeddings with a graph-size-agnostic encoder."
 }

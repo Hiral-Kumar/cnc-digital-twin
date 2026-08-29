@@ -52,7 +52,7 @@ data:
 preprocessing:
   # Feature extraction
   features: ["rms", "kurtosis", "crest_factor", "peak_to_peak", "spectral_amp"]
-  n_features: 5
+  n_features: 6
 
   # Bearing geometry for IMS (from documentation)
   # Used to compute Ball Pass Frequency Outer race (BPFO)
@@ -151,7 +151,7 @@ physics:
   # Archard's Wear Law constants (for IMS Rexnord ZA-2115 bearing steel)
   archard:
     wear_coefficient_k: 1.0e-7     # dimensionless, typical for lubricated steel
-    hardness_H: 6.0e9              # Pa, Vickers hardness of bearing steel
+    hardness_H: 6.0e+9              # Pa, Vickers hardness of bearing steel
     constant_load_N: 26689.0       # Newtons — 6000 lb IMS radial load
 
   # Paris' Law constants (for bearing steel, typical values)
