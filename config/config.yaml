@@ -129,6 +129,7 @@ model:
     rtol: 1.0e-3                    # relative tolerance (looser than 1e-5 for speed)
     atol: 1.0e-4                    # absolute tolerance
     adjoint: true                   # use adjoint method for memory-efficient training
+    elapsed_time_scale: 3.0   # NEW: how much longer late-life windows integrate vs early-life
 
   # Readout Head
   readout:
